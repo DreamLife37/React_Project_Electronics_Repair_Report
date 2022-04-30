@@ -2,13 +2,14 @@ import React, {useState} from 'react';
 import './App.css';
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
+import {EditableCell} from "./components/EditableCell";
 
 type DataOneRepair = [id: string,
     name: string,
     typeOfRepair: string,
     sumRepair: number,
     sparePartsCost: number,
-    monthlySum: number]
+    workPrice: number]
 
 type DataType = Array<DataOneRepair>
 
@@ -51,6 +52,13 @@ function App() {
             }))
         }
 
+        const changeTitleCell = (column: number, row: number, newValue: string | number) => {
+            let newData = [...data]
+            newData[row][column] = newValue
+            newData[row][5] = newData[row][3] - newData[row][4]
+            return setData(newData)
+        }
+
         return (<>
             <h2>Отчет по ремонту за Апрель</h2>
             <table>
@@ -62,19 +70,28 @@ function App() {
                     <th>Стоимость запчасти</th>
                     <th>Стоимость работы</th>
                 </tr>
-                {data.map((item, index) =>
-                    <>
+                {data.map((item, index) => {
+                    const onTitleChangeHandler = (newValue: string | number, column: number) => {
+                        changeTitleCell(column, index, newValue)
+                        //index - номер строки = row
+                    }
+                    return <>
                         <tr key={item[0]}>
                             <td>{index + 1} </td>
-                            <td>{data[index][1]} </td>
-                            <td>{data[index][2]} </td>
-                            <td>{data[index][3]} </td>
-                            <td>{data[index][4]} </td>
+                            <EditableCell value={data[index][1]}
+                                          onChange={(newValue) => onTitleChangeHandler(newValue, 1)}/>
+                            <EditableCell value={data[index][2]}
+                                          onChange={(newValue) => onTitleChangeHandler(newValue, 2)}/>
+                            <EditableCell value={data[index][3]}
+                                          onChange={(newValue) => onTitleChangeHandler(+newValue, 3)}/>
+                            <EditableCell value={data[index][4]}
+                                          onChange={(newValue) => onTitleChangeHandler(+newValue, 4)}/>
                             <td>{workPrice = data[index][3] - data[index][4]} </td>
+
                             <button onClick={() => onClickRemoveRepairHandler(item[0])}>X</button>
                         </tr>
                     </>
-                )}
+                })}
             </table>
 
             <div>
@@ -85,11 +102,7 @@ function App() {
                 <AddItemForm onChange={setSparePartsCost} value={sparePartsCost} placeholder="Стоимость запчастей"
                              type={'number'}/>
                 <button onClick={onClickAddRepairHandler}>+</button>
-
-
             </div>
-
-
             <br/>
             Итого за месяц стоимость работ: {getSumColumn(data, 5)}
         </>)
@@ -97,14 +110,12 @@ function App() {
 
     return (
         <div className="App">
-
             <SortableBody/>
             {SortableBody()}
-
-            <td>&nbsp;</td>
-
         </div>
     );
 }
 
+
 export default App;
+
