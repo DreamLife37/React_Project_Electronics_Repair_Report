@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ChangeEvent, useState} from "react";
 
 type AddItemForm = {
     onChange: (value: any) => void
@@ -7,13 +7,15 @@ type AddItemForm = {
     type: string
 }
 
-export const AddItemForm = (props: AddItemForm) => {
+export const AddItemForm = React.memo((props: AddItemForm) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        props.onChange(e.currentTarget.value)
+    }
     return <>
         <input value={props.value}
-               onChange={(event) => props.onChange(event.currentTarget.value)}
+               onChange={onChangeHandler}
                placeholder={props.placeholder}
                type={props.type}
         />
     </>
-
-}
+})
