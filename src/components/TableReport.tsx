@@ -9,6 +9,7 @@ type TableReportType = {
     onClickAddRepairHandler: (monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => void
     onClickRemoveRepairHandler: (id: string, monthId: string) => void
     changeTitleCell: (id: string, newValue: string | number, monthId: string, nameCell: string | number) => void
+    monthName: any
 }
 
 export const TableReport = (props: TableReportType) => {
@@ -29,7 +30,7 @@ export const TableReport = (props: TableReportType) => {
 
     return (<>
 
-        <h2>Отчет по ремонту за {'Январь'}</h2>
+        <h2>Отчет по ремонту за {props.monthName}</h2>
         <table>
             <tr>
                 <th>№</th>
