@@ -2,6 +2,7 @@ import React, {ChangeEvent, useState} from 'react';
 import './App.css';
 import {v1} from "uuid";
 import {TableReport} from "./components/TableReport";
+import {Chart} from './components/Chart';
 
 
 type DataOneRepairType = {
@@ -17,8 +18,8 @@ export type DataType = {
     [key: string]: Array<DataOneRepairType>
 }
 
-type MonthsType = {
-    id: string, title: string
+export type MonthsType = {
+    id: string, title: string, monthlySum: number
 }
 
 let month1 = v1()
@@ -36,7 +37,7 @@ let month12 = v1()
 
 
 function App() {
-    let workPrice
+    let workPrice, monthlySum: number
 
     // const monthTitle = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
 
@@ -59,11 +60,11 @@ function App() {
     const currentMonth = monthTitle[new Date().getMonth()]
 
     let [months, setMonths] = useState<Array<MonthsType>>([
-        {id: month1, title: monthTitle[0].title},
-        {id: month2, title: monthTitle[1].title},
-        {id: month3, title: monthTitle[2].title},
-        {id: month4, title: monthTitle[3].title},
-        {id: month5, title: monthTitle[4].title},
+        {id: month1, title: monthTitle[0].title, monthlySum: 2575},
+        {id: month2, title: monthTitle[1].title, monthlySum: 3575},
+        {id: month3, title: monthTitle[2].title, monthlySum: 4575},
+        {id: month4, title: monthTitle[3].title, monthlySum: 1575},
+        {id: month5, title: monthTitle[4].title, monthlySum: 3575},
     ])
 
     let [monthId, setMonthId] = useState(currentMonth.id)
@@ -196,9 +197,9 @@ function App() {
                 id: v1(),
                 lastNameClient: 'Svetlana',
                 typeOfRepair: 'Замена разъема оригинал Xiaomi Mi 11',
-                sumRepair: 2000,
-                sparePartsCost: 1000,
-                workPrice: 1000
+                sumRepair: 2500,
+                sparePartsCost: 2000,
+                workPrice: 500
             },
         ],
     })
@@ -213,7 +214,7 @@ function App() {
 
     const addMonthlyReport = () => {
         const newMonthlyReportId = v1()
-        const newMonthlyReport = {id: newMonthlyReportId, title: 'Март'}
+        const newMonthlyReport = {id: newMonthlyReportId, title: 'Март', monthlySum: 0}
         setMonths([...months, newMonthlyReport])
         setData({
             ...data,
@@ -249,6 +250,19 @@ function App() {
     }
 
 
+    const getSumColumn = (monthId: string) => {
+        let sum = 0
+        data[monthId].forEach((el: any) => sum += el.workPrice)
+        return sum
+    }
+
+
+    const getMonthlySum = () => {
+        months.map(month => month.monthlySum = getSumColumn(month.id))
+    }
+
+    getMonthlySum()
+
     return (
         <div className="App">
             <select value={monthId} onChange={onChangeSelect}>
@@ -263,7 +277,10 @@ function App() {
                          onClickAddRepairHandler={onClickAddRepairHandler}
                          onClickRemoveRepairHandler={onClickRemoveRepairHandler}
                          changeTitleCell={changeTitleCell}
+
             />
+
+            <div className='chart'><Chart data={months}/></div>
         </div>
     );
 }
