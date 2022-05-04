@@ -1,8 +1,10 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useReducer, useState} from 'react';
 import './App.css';
 import {v1} from "uuid";
 import {TableReport} from "./components/TableReport";
 import {Chart} from './components/Chart';
+import {addMonth, monthsReducer} from "./store/monthsReducer";
+import {addRepair, changeCell, removeRepair, repairReducer} from "./store/repairReducer";
 
 
 type DataOneRepairType = {
@@ -56,10 +58,9 @@ function App() {
         {id: month12, title: 'Декабрь'},
     ]
 
-
     const currentMonth = monthTitle[new Date().getMonth()]
 
-    let [months, setMonths] = useState<Array<MonthsType>>([
+    let [months, dispatchToMonths] = useReducer(monthsReducer, [
         {id: month1, title: monthTitle[0].title, monthlySum: 2575},
         {id: month2, title: monthTitle[1].title, monthlySum: 3575},
         {id: month3, title: monthTitle[2].title, monthlySum: 4575},
@@ -71,7 +72,7 @@ function App() {
 
     const monthName = months.filter(month => monthId === month.id)[0].title
 
-    let [data, setData] = useState<DataType>({
+    let [data, dispatchToData] = useReducer(repairReducer, {
         [month1]: [
             {
                 id: v1(),
@@ -205,43 +206,32 @@ function App() {
     })
 
     const onClickAddRepairHandler = (monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => {
-        workPrice = sumRepair - sparePartsCost
-        const newRepairItem = {id: v1(), lastNameClient, typeOfRepair, sumRepair, sparePartsCost, workPrice}
-        let monthlyReport = data[monthId]
-        data[monthId] = [...monthlyReport, newRepairItem]
-        setData({...data})
+        dispatchToData(addRepair(monthId, lastNameClient, typeOfRepair, sumRepair, sparePartsCost))
     }
 
     const addMonthlyReport = () => { //изменить название на addMonth
-        const newMonthlyReportId = v1()
-        const newMonthlyReport = {id: newMonthlyReportId, title: 'Март', monthlySum: 0}
-        setMonths([...months, newMonthlyReport])
-        setData({
-            ...data,
-            [newMonthlyReportId]: []
-        })
+        // const newMonthlyReportId = v1()
+        // const newMonthlyReport = {id: newMonthlyReportId, title: 'Март', monthlySum: 0}
+        // setMonths([...months, newMonthlyReport])
+        // setData({
+        //     ...data,
+        //     [newMonthlyReportId]: []
+        // })
+        dispatchToMonths(addMonth()) //не работает, исправить
     }
 
     const onClickRemoveRepairHandler = (id: string, monthId: string) => { //изменить название
-        let monthlyReport = data[monthId]
-        data[monthId] = monthlyReport.filter(item => {
-            return item.id !== id
-        })
-        setData({...data})
+        // let monthlyReport = data[monthId]
+        // data[monthId] = monthlyReport.filter(item => {
+        //     return item.id !== id
+        // })
+        // setData({...data})
+        dispatchToData(removeRepair(id, monthId))
     }
 
     const changeTitleCell = (id: string, newValue: string | number, monthId: string, nameCell: string | number) => {
-        let monthlyReport = data[monthId]
-        let dataOneRepair = monthlyReport.find(row => row.id === id)
-
-        if (dataOneRepair) {
-            if (typeof newValue === "string") {
-                // @ts-ignore
-                dataOneRepair[nameCell] = newValue
-                dataOneRepair.workPrice = dataOneRepair.sumRepair - dataOneRepair.sparePartsCost
-            }
-        }
-        return setData({...data})
+        //  @ts-ignore
+        dispatchToData(changeCell(id, newValue, monthId, nameCell))
     }
 
 
