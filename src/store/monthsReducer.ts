@@ -1,59 +1,41 @@
-
 import {v1} from "uuid";
 import {MonthsType} from "../App";
 
 type ActionType = addMonthType
 
-type addMonthType = {
+export type addMonthType = {
     type: 'ADD-MONTH'
+    newMonthlyReportId: string
+    title: string
 }
 
-export const addMonth = (): addMonthType => {
-    return {type: 'ADD-MONTH'}
+export const addMonth = (title: string, newMonthlyReportId: string): addMonthType => {
+    return {type: 'ADD-MONTH', newMonthlyReportId, title}
 }
-
-
-let month1 = v1()
-let month2 = v1()
-let month3 = v1()
-let month4 = v1()
-let month5 = v1()
-let month6 = v1()
-let month7 = v1()
-let month8 = v1()
-let month9 = v1()
-let month10 = v1()
-let month11 = v1()
-let month12 = v1()
 
 const monthTitle = [
-    {id: month1, title: 'Январь'},
-    {id: month2, title: 'Февраль'},
-    {id: month3, title: 'Март'},
-    {id: month4, title: 'Апрель'},
-    {id: month5, title: 'Май'},
-    {id: month6, title: 'Июнь'},
-    {id: month7, title: 'Июль'},
-    {id: month8, title: 'Август'},
-    {id: month9, title: 'Сентябрь'},
-    {id: month10, title: 'Октябрь'},
-    {id: month11, title: 'Ноябрь'},
-    {id: month12, title: 'Декабрь'},
+    {id: '0', title: 'Январь'},
+    {id: '1', title: 'Февраль'},
+    {id: '2', title: 'Март'},
+    {id: '3', title: 'Апрель'},
+    {id: '4', title: 'Май'},
+    {id: '5', title: 'Июнь'},
+    {id: '6', title: 'Июль'},
+    {id: '7', title: 'Август'},
+    {id: '8', title: 'Сентябрь'},
+    {id: '9', title: 'Октябрь'},
+    {id: '10', title: 'Ноябрь'},
+    {id: '11', title: 'Декабрь'},
 ]
 
 const initialState: Array<MonthsType> = [
-    {id: month1, title: monthTitle[0].title, monthlySum: 2575},
-    {id: month2, title: monthTitle[1].title, monthlySum: 3575},
-    {id: month3, title: monthTitle[2].title, monthlySum: 4575},
-    {id: month4, title: monthTitle[3].title, monthlySum: 1575},
-    {id: month5, title: monthTitle[4].title, monthlySum: 3575},
+    {id: '0', title: monthTitle[0].title, monthlySum: 2575},
 ]
 
 export const monthsReducer = (state: Array<MonthsType> = initialState, action: ActionType) => {
     switch (action.type) {
         case "ADD-MONTH":
-            const newMonthlyReportId = v1()
-            return [...state, {id: newMonthlyReportId, title: 'Март', monthlySum: 0}]
+            return [...state, {id: action.newMonthlyReportId, title: action.title, monthlySum: 0}]
         default:
             return state;
     }

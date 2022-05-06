@@ -28,6 +28,7 @@ export const TableReport = (props: TableReportType) => {
         return sum
     }
 
+
     return (<>
 
         <h2>Отчет по ремонту за {props.monthName}</h2>

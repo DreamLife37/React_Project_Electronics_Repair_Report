@@ -33,7 +33,6 @@ export const options = {
     },
 };
 
-const labels = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май',];
 
 type ChartType = {
     data: Array<MonthsType>
@@ -41,6 +40,7 @@ type ChartType = {
 
 export function Chart(props: ChartType) {
     let dataForChart = props.data.map(item => item.monthlySum)
+    let labels = props.data.map(item => item.title)
 
     const data = {
         labels,

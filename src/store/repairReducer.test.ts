@@ -272,7 +272,7 @@ test('correct change should cell tabla', () => {
         ],
     }
 
-    const action = changeCell('3','тест-измененный', 'month2','lastNameClient')
+    const action = changeCell('3', 'тест-измененный', 'month2', 'lastNameClient')
 
     const endState = repairReducer(startState, action)
 

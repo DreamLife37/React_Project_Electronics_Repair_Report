@@ -1,8 +1,12 @@
-
 import {v1} from "uuid";
 import {DataType} from "../App";
+import {addMonthType} from "./monthsReducer";
 
-type ActionType = addRepairType | removeRepairType | changeCellType
+
+type ActionType = addRepairType |
+    removeRepairType |
+    changeCellType |
+    addMonthType
 
 type addRepairType = {
     type: 'ADD-REPAIR',
@@ -38,7 +42,34 @@ export const changeCell = (id: string, newValue: string | number, monthId: strin
     return {type: 'CHANGE-CELL', id, newValue, monthId, nameCell}
 }
 
-const initialState: DataType = {}
+const initialState: DataType = {
+    ['0']: [
+        {
+            id: v1(),
+            lastNameClient: 'Alexander',
+            typeOfRepair: 'Замена дисплея Xiaomi Redmi 11',
+            sumRepair: 3000,
+            sparePartsCost: 1500,
+            workPrice: 1500
+        },
+        {
+            id: v1(),
+            lastNameClient: 'Paul',
+            typeOfRepair: 'Замена дисплея Xiaomi Redmi 6A',
+            sumRepair: 2200,
+            sparePartsCost: 1200,
+            workPrice: 1000
+        },
+        {
+            id: v1(),
+            lastNameClient: 'Larisa',
+            typeOfRepair: 'Замена разъема Xiaomi Redmi 6A',
+            sumRepair: 900,
+            sparePartsCost: 500,
+            workPrice: 400
+        },
+    ]
+}
 
 export const repairReducer = (state: DataType = initialState, action: ActionType) => {
     switch (action.type) {
@@ -74,9 +105,14 @@ export const repairReducer = (state: DataType = initialState, action: ActionType
                 ...state,
                 [action.monthId]: state[action.monthId].map(m =>
                     m.id === action.id ? {...m} : m)
-               //m.id === action.id ? {...m, m: [action.nameCell]} : m)
+                //m.id === action.id ? {...m, m: [action.nameCell]} : m)
             }
         }
+
+        case "ADD-MONTH":
+            return {
+                ...state, [action.newMonthlyReportId]: []
+            }
         default:
             return state;
     }

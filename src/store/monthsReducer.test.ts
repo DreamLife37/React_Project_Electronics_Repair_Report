@@ -1,6 +1,6 @@
 import {v1} from 'uuid';
 
-import {monthsReducer} from "./monthsReducer";
+import {addMonth, monthsReducer} from "./monthsReducer";
 import {MonthsType} from "../App";
 
 test('correct month should be added', () => {
@@ -37,7 +37,7 @@ test('correct month should be added', () => {
         {id: month2, title: monthTitle[1].title, monthlySum: 3575},
     ]
 
-    const endState = monthsReducer(startState, {type: 'ADD-MONTH'})
+    const endState = monthsReducer(startState, addMonth("Новый месяц", '2'))
 
     expect(endState.length).toBe(3);
     expect(endState[2].title).toBe('Март');

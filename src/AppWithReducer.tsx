@@ -205,6 +205,7 @@ function App() {
         ],
     })
 
+
     const onClickAddRepairHandler = (monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => {
         dispatchToData(addRepair(monthId, lastNameClient, typeOfRepair, sumRepair, sparePartsCost))
     }
@@ -217,7 +218,14 @@ function App() {
         //     ...data,
         //     [newMonthlyReportId]: []
         // })
-        dispatchToMonths(addMonth()) //не работает, исправить
+
+
+        // @ts-ignore
+        const action = addMonth("Новый месяц",)
+        dispatchToMonths(action)
+        dispatchToData(action)
+        console.log(data)
+        console.log(months)
     }
 
     const onClickRemoveRepairHandler = (id: string, monthId: string) => { //изменить название
