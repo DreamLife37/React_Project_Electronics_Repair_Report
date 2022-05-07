@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/React_Project_Electronics_Repair_Report/static/css/main.a2f96378.css",
+    "main.js": "/React_Project_Electronics_Repair_Report/static/js/main.ad3464d2.js",
+    "static/js/787.03d669dd.chunk.js": "/React_Project_Electronics_Repair_Report/static/js/787.03d669dd.chunk.js",
+    "index.html": "/React_Project_Electronics_Repair_Report/index.html",
+    "main.a2f96378.css.map": "/React_Project_Electronics_Repair_Report/static/css/main.a2f96378.css.map",
+    "main.ad3464d2.js.map": "/React_Project_Electronics_Repair_Report/static/js/main.ad3464d2.js.map",
+    "787.03d669dd.chunk.js.map": "/React_Project_Electronics_Repair_Report/static/js/787.03d669dd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a2f96378.css",
+    "static/js/main.ad3464d2.js"
+  ]
+}
