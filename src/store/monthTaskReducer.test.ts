@@ -1,4 +1,3 @@
-import {v1} from "uuid";
 import {DataType, MonthsType} from "../App";
 import {addMonth, monthsReducer} from "./monthsReducer";
 import {repairReducer} from "./repairReducer";
