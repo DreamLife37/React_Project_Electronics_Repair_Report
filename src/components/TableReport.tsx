@@ -1,7 +1,7 @@
 import {EditableCell} from "./EditableCell";
-import {AddItemForm} from "./AddItemForm";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {DataType} from "../App";
+import {AddRowToTable} from "./AddRowToTable";
 
 type TableReportType = {
     data: DataType
@@ -12,12 +12,7 @@ type TableReportType = {
     monthName: any
 }
 
-export const TableReport = (props: TableReportType) => {
-
-    let [lastNameClient, setLastNameClient] = useState('')
-    let [typeOfRepair, setTypeOfRepair] = useState('')
-    let [sumRepair, setSumRepair] = useState<number>(0)
-    let [sparePartsCost, setSparePartsCost] = useState<number>(0)
+export const TableReport = React.memo((props: TableReportType) => {
 
     let workPrice,
         monthlySum
@@ -27,6 +22,14 @@ export const TableReport = (props: TableReportType) => {
         props.data[monthId].forEach((el: any) => sum += el.workPrice)
         return sum
     }
+
+    const onTitleChangeHandler = useCallback((id: string, newValue: string | number, nameCell: string | number) => {
+        props.changeTitleCell(id, newValue, props.monthId, nameCell)
+    }, [])
+
+    const changeValueCellLastNameClient = useCallback((id: string, newValue: string) => {
+        onTitleChangeHandler(id, newValue, 'lastNameClient')
+    }, [])
 
 
     return (<>
@@ -44,24 +47,19 @@ export const TableReport = (props: TableReportType) => {
 
             {props.data[props.monthId].map((item, index) => {
 
-                const onTitleChangeHandler = (newValue: string | number, nameCell: string | number) => {
-                    props.changeTitleCell(item.id, newValue, props.monthId, nameCell)
-                    //index - номер строки = row
-                }
-
                 monthlySum = getSumColumn(props.monthId)
 
                 return <>
                     <tr key={item.id}>
                         <td>{index + 1} </td>
                         <EditableCell value={item.lastNameClient}
-                                      onChange={(newValue) => onTitleChangeHandler(newValue, 'lastNameClient')}/>
+                                      onChange={(newValue) => changeValueCellLastNameClient(item.id, newValue)}/>
                         <EditableCell value={item.typeOfRepair}
-                                      onChange={(newValue) => onTitleChangeHandler(newValue, 'typeOfRepair')}/>
+                                      onChange={(newValue) => onTitleChangeHandler(item.id, newValue, 'typeOfRepair')}/>
                         <EditableCell value={item.sumRepair}
-                                      onChange={(newValue) => onTitleChangeHandler(newValue, 'sumRepair')}/>
+                                      onChange={(newValue) => onTitleChangeHandler(item.id, newValue, 'sumRepair')}/>
                         <EditableCell value={item.sparePartsCost}
-                                      onChange={(newValue) => onTitleChangeHandler(newValue, 'sparePartsCost')}/>
+                                      onChange={(newValue) => onTitleChangeHandler(item.id, newValue, 'sparePartsCost')}/>
                         <td>{workPrice = item.sumRepair - item.sparePartsCost} </td>
 
                         <button onClick={() => props.onClickRemoveRepairHandler(item.id, props.monthId)}>X</button>
@@ -69,20 +67,10 @@ export const TableReport = (props: TableReportType) => {
                 </>
             })}
         </table>
-        <div>
-            <br/>
-            <AddItemForm onChange={setLastNameClient} value={lastNameClient}
-                         placeholder="Фамилия" type={'text'}/>
-            <AddItemForm onChange={setTypeOfRepair} value={typeOfRepair}
-                         placeholder="Вид ремонта" type={'text'}/>
-            <AddItemForm onChange={setSumRepair} value={sumRepair} placeholder="Стоимость ремонта" type={'number'}/>
-            <AddItemForm onChange={setSparePartsCost} value={sparePartsCost} placeholder="Стоимость запчастей"
-                         type={'number'}/>
-            <button
-                onClick={() => props.onClickAddRepairHandler(props.monthId, lastNameClient, typeOfRepair, sumRepair, sparePartsCost)}>+
-            </button>
-        </div>
+
+        <AddRowToTable onClickAddRepairHandler={props.onClickAddRepairHandler} monthId={props.monthId}/>
+
         <br/>
         Итого за месяц стоимость работ: {monthlySum}
     </>)
-}
+})

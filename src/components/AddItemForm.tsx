@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 
 type AddItemForm = {
     onChange: (value: any) => void
@@ -11,6 +11,9 @@ export const AddItemForm = React.memo((props: AddItemForm) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         props.onChange(e.currentTarget.value)
     }
+
+    console.log('AddItemForm is called')
+
     return <>
         <input value={props.value}
                onChange={onChangeHandler}

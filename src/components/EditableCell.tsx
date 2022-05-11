@@ -4,10 +4,10 @@ type EditableCellType = {
     value: any
     onChange: (newValue: string) => void
 }
-export const EditableCell = (props: EditableCellType) => {
+export const EditableCell = React.memo((props: EditableCellType) => {
     let [editMode, setEditMode] = useState(false)
     let [title, setTitle] = useState(props.value)
-
+    console.log('EditableCell')
     const activateEditMode = () => {
         setEditMode(true)
         setTitle(props.value)
@@ -22,4 +22,4 @@ export const EditableCell = (props: EditableCellType) => {
     return editMode
         ? <input value={title} onChange={(e) => setTitle(e.currentTarget.value)} autoFocus onBlur={activateViewMode}/>
         : <td onDoubleClick={activateEditMode}>{props.value} </td>
-}
+})

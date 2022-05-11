@@ -1,10 +1,9 @@
-import React, {ChangeEvent, useReducer, useState} from 'react';
+import React, {ChangeEvent, useCallback, useReducer, useState} from 'react';
 import './App.css';
-import {v1} from "uuid";
 import {TableReport} from "./components/TableReport";
 import {Chart} from './components/Chart';
-import {addMonth, monthsReducer} from "./store/monthsReducer";
-import {addRepair, changeCell, removeRepair, repairReducer} from "./store/repairReducer";
+import {addMonth} from "./store/monthsReducer";
+import {addRepair, changeCell, removeRepair} from "./store/repairReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
 
@@ -26,39 +25,10 @@ export type MonthsType = {
     id: string, title: string, monthlySum: number
 }
 
-// let month1 = v1()
-// let month2 = v1()
-// let month3 = v1()
-// let month4 = v1()
-// let month5 = v1()
-// let month6 = v1()
-// let month7 = v1()
-// let month8 = v1()
-// let month9 = v1()
-// let month10 = v1()
-// let month11 = v1()
-// let month12 = v1()
-
-
 function AppWithRedux() {
     let workPrice, monthlySum: number
+    console.log("App is called")
 
-    // const monthTitle = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-    //
-    // const monthTitle = [
-    //     {id: month1, title: 'Январь'},
-    //     {id: month2, title: 'Февраль'},
-    //     {id: month3, title: 'Март'},
-    //     {id: month4, title: 'Апрель'},
-    //     {id: month5, title: 'Май'},
-    //     {id: month6, title: 'Июнь'},
-    //     {id: month7, title: 'Июль'},
-    //     {id: month8, title: 'Август'},
-    //     {id: month9, title: 'Сентябрь'},
-    //     {id: month10, title: 'Октябрь'},
-    //     {id: month11, title: 'Ноябрь'},
-    //     {id: month12, title: 'Декабрь'},
-    // ]
     const monthTitle = [
         {id: '0', title: 'Январь'},
         {id: '1', title: 'Февраль'},
@@ -95,29 +65,26 @@ function AppWithRedux() {
     console.log(newMonthTitle)
     // console.log(monthTitle[generateMonthId].title)
 
-    const onClickAddRepairHandler = (monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => {
+    const onClickAddRepairHandler = useCallback((monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => {
         dispatch(addRepair(monthId, lastNameClient, typeOfRepair, sumRepair, sparePartsCost))
-    }
+    }, [])
 
-    const addMonthlyReport = () => {
+    const addMonthlyReport = useCallback(() => {
         dispatch(addMonth(newMonthTitle, (generateMonthId).toString()))
-    }
+    }, [addMonth, generateMonthId])
 
     const onClickRemoveRepairHandler = (id: string, monthId: string) => { //изменить название
         dispatch(removeRepair(id, monthId))
     }
 
-    const changeTitleCell = (id: string, newValue: string | number, monthId: string, nameCell: string | number) => {
-
+    const changeTitleCell = useCallback((id: string, newValue: string | number, monthId: string, nameCell: string | number) => {
         // @ts-ignore
         dispatch(changeCell(id, newValue, monthId, nameCell))
-    }
-
+    }, [])
 
     const onChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         setMonthId(e.currentTarget.value)
     }
-
 
     const getSumColumn = (monthId: string) => {
         let sum = 0
@@ -131,7 +98,6 @@ function AppWithRedux() {
     }
 
     getMonthlySum()
-
 
     return (
         <div className="App">

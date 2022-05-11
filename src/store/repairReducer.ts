@@ -96,6 +96,8 @@ export const repairReducer = (state: DataType = initialState, action: ActionType
         }
         case "CHANGE-CELL": {
             let dataOneRepair = state[action.monthId].find(row => row.id === action.id)
+            //let dataOneRepair = state[action.monthId].filter(row => row.id === action.id)
+            console.log(dataOneRepair)
             if (dataOneRepair) {
                 // @ts-ignore
                 dataOneRepair[action.nameCell] = action.newValue
