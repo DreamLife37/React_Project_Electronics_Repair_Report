@@ -20,6 +20,8 @@ export const EditableCell = React.memo((props: EditableCellType) => {
 
 
     return editMode
-        ? <input value={title} onChange={(e) => setTitle(e.currentTarget.value)} autoFocus onBlur={activateViewMode}/>
+        ?
+        <td><input value={title} onChange={(e) => setTitle(e.currentTarget.value)} autoFocus onBlur={activateViewMode}/>
+        </td>
         : <td onDoubleClick={activateEditMode}>{props.value} </td>
 })

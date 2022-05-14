@@ -1,4 +1,3 @@
-import {v1} from "uuid";
 import {MonthsType} from "../App";
 
 type ActionType = addMonthType
