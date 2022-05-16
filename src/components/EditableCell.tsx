@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 
 type EditableCellType = {
     value: any
@@ -7,17 +7,15 @@ type EditableCellType = {
 export const EditableCell = React.memo((props: EditableCellType) => {
     let [editMode, setEditMode] = useState(false)
     let [title, setTitle] = useState(props.value)
-    console.log('EditableCell')
-    const activateEditMode = () => {
+    const activateEditMode = useCallback(() => {
         setEditMode(true)
         setTitle(props.value)
-    }
+    },[props.value])
 
-    const activateViewMode = () => {
+    const activateViewMode = useCallback(() => {
         setEditMode(false)
         props.onChange(title)
-    }
-
+    },[title,props])
 
     return editMode
         ?

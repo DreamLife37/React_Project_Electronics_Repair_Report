@@ -6,6 +6,14 @@ import {addMonth} from "./store/monthsReducer";
 import {addRepair} from "./store/repairReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
+import SendIcon from '@mui/icons-material/Send';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import InputLabel from '@mui/material/InputLabel';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import {Button} from "@mui/material";
 
 
 type DataOneRepairType = {
@@ -26,9 +34,6 @@ export type MonthsType = {
 }
 
 function App() {
-    let workPrice, monthlySum: number
-    console.log("App1 is called")
-
     const monthTitle = [
         {id: '0', title: 'Январь'},
         {id: '1', title: 'Февраль'},
@@ -57,24 +62,20 @@ function App() {
 
     const monthName = months.filter(month => monthId === month.id)[0].title
 
-    //console.log(months.filter(month => monthId === month.id)[0].title)
-    //console.log(months.filter(month => monthId === month.id))
-
     const generateMonthId = +months[months.length - 1].id + 1
     const newMonthTitle = monthTitle[generateMonthId].title
-    console.log(newMonthTitle)
     // console.log(monthTitle[generateMonthId].title)
 
     const onClickAddRepairHandler = useCallback((monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => {
         dispatch(addRepair(monthId, lastNameClient, typeOfRepair, sumRepair, sparePartsCost))
-    }, [])
+    }, [dispatch])
 
     const addMonthlyReport = useCallback(() => {
         dispatch(addMonth(newMonthTitle, (generateMonthId).toString()))
     }, [addMonth, generateMonthId])
 
-    const onChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-        setMonthId(e.currentTarget.value)
+    const onChangeSelect = (e: SelectChangeEvent) => {
+        setMonthId(e.target.value)
     }
 
     const getSumColumn = (monthId: string) => {
@@ -84,7 +85,6 @@ function App() {
     }
 
     const getMonthlySum = () => {
-        // @ts-ignore
         months.map(month => month.monthlySum = getSumColumn(month.id))
     }
 
@@ -92,13 +92,26 @@ function App() {
 
     return (
         <div className="App">
-            <select value={monthId} onChange={onChangeSelect}>
-                {months.map(month => {
-                    return <option key={month.id} value={month.id}>{month.title}</option>
-                })}
-            </select>
 
-            <button onClick={addMonthlyReport}>Добавить новый месяц</button>
+            <Box sx={{display: 'flex'}}>
+                <FormControl>
+                    <InputLabel id="select-month">Месяц</InputLabel>
+                    <Select
+                        value={monthId}
+                        label="Месяц"
+                        onChange={onChangeSelect}
+                    >
+                        {months.map(month => {
+                            return <MenuItem key={month.id} value={month.id}>{month.title}</MenuItem>
+                        })
+                        }
+                    </Select>
+                </FormControl>
+
+                <Button onClick={addMonthlyReport} variant="contained" endIcon={<AddBoxIcon/>}>
+                    Добавить новый месяц
+                </Button>
+            </Box>
 
             <TableReport data={data} monthId={monthId} monthName={monthName}
                          onClickAddRepairHandler={onClickAddRepairHandler}

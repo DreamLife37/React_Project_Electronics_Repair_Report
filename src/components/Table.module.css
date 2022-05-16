@@ -1,0 +1,33 @@
+.table {
+    width: auto;
+    table-layout: fixed;
+
+}
+
+.theadChild1 {
+    width: 5%;
+}
+
+.theadChild2 {
+    width: 10%;
+}
+
+.theadChild3 {
+    width: 20%;
+}
+
+.theadChild4 {
+    width: 5%;
+}
+
+.theadChild5 {
+    width: 7%;
+}
+
+.theadChild6 {
+    width: 7%;
+}
+
+.th, td {
+    padding: 5px;
+}

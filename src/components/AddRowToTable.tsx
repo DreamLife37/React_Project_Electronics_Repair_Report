@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import {AddItemForm} from "./AddItemForm";
+import {IconButton} from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 type addRowToTableType = {
     onClickAddRepairHandler: (monthId: string, lastNameClient: string, typeOfRepair: string, sumRepair: number, sparePartsCost: number) => void
@@ -25,8 +27,9 @@ export const AddRowToTable = (props: addRowToTableType) => {
         <AddItemForm onChange={setSumRepair} value={sumRepair} placeholder="Стоимость ремонта" type={'number'}/>
         <AddItemForm onChange={setSparePartsCost} value={sparePartsCost} placeholder="Стоимость запчастей"
                      type={'number'}/>
-        <button
-            onClick={addRepair}>+
-        </button>
+
+        <IconButton onClick={addRepair} color="primary" aria-label="add an repair">
+            <AddBoxIcon/>
+        </IconButton>
     </div>
 }

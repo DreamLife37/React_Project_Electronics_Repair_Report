@@ -4,7 +4,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../store/store";
 import {DataType} from "../App";
 import {changeCell, removeRepair} from "../store/repairReducer";
-
+import {IconButton} from "@mui/material";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 type TableItemType = {
     monthId: string
@@ -14,17 +15,12 @@ export const TableItem = React.memo((props: TableItemType) => {
 
     let data = useSelector<AppRootStateType, DataType>(state => state.data)
     const dispatch = useDispatch()
-
     let workPrice
 
     const onTitleChangeHandler = useCallback((id: string, newValue: string | number, nameCell: string | number) => {
         // @ts-ignore
         dispatch(changeCell(id, newValue, props.monthId, nameCell))
-    }, [])
-
-    const changeValueCellLastNameClient = useCallback((id: string, newValue: string) => {
-        onTitleChangeHandler(id, newValue, 'lastNameClient')
-    }, [])
+    }, [dispatch, props.monthId])
 
     const onClickRemoveHandler = (id: string, monthId: string) => {
         dispatch(removeRepair(id, monthId))
@@ -35,7 +31,7 @@ export const TableItem = React.memo((props: TableItemType) => {
             return <tr key={item.id}>
                 <td>{index + 1} </td>
                 <EditableCell value={item.lastNameClient}
-                              onChange={(newValue) => changeValueCellLastNameClient(item.id, newValue)}/>
+                              onChange={(newValue) => onTitleChangeHandler(item.id, newValue, 'lastNameClient')}/>
                 <EditableCell value={item.typeOfRepair}
                               onChange={(newValue) => onTitleChangeHandler(item.id, newValue, 'typeOfRepair')}/>
                 <EditableCell value={item.sumRepair}
@@ -45,7 +41,10 @@ export const TableItem = React.memo((props: TableItemType) => {
                 <td>{workPrice = item.sumRepair - item.sparePartsCost} </td>
 
                 <td>
-                    <button onClick={() => onClickRemoveHandler(item.id, props.monthId)}>X</button>
+                    <IconButton onClick={() => onClickRemoveHandler(item.id, props.monthId)} color="primary"
+                                aria-label="add an alarm">
+                        <DeleteOutlineIcon/>
+                    </IconButton>
                 </td>
             </tr>
 

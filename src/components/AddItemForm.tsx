@@ -12,8 +12,6 @@ export const AddItemForm = React.memo((props: AddItemForm) => {
         props.onChange(e.currentTarget.value)
     }
 
-    console.log('AddItemForm is called')
-
     return <>
         <input value={props.value}
                onChange={onChangeHandler}
